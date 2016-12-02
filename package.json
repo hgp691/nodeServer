@@ -1,0 +1,18 @@
+{
+  "name": "wsjobjob",
+  "version": "1.0.0",
+  "description": "webservices de jobjob en node",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "HERO",
+  "license": "ISC",
+  "dependencies": {
+    "activedirectory": "^0.7.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-fileupload": "0.0.5",
+    "mongoose": "^4.7.0"
+  }
+}
