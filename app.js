@@ -31,6 +31,16 @@ mongoose.connect(BD);
 //USUARIO
 var Usuario = require("./Usuario");
 
+//MANEJADOR DE MYSQL
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  port     :  '8889',
+  user     : 'jobjob_user',
+  password : '@123.abc',
+  database : 'JobJob'
+});
+
 
 
 
@@ -225,6 +235,33 @@ app.post('/compartirMovil',function(req,res){
   	}
 });
 
+//CARGAR MARCAS
+app.post('/Marcas',function(req,res){
+  var respuesta = new Respuesta();
+  if (!req.headers.authorization) {
+    respuesta.error = {"error":"DEBE AUTENTICAR"};
+      res.json(respuesta);
+    }
+  var encoded = req.headers.authorization.split(' ')[1];
+    var decoded = new Buffer(encoded, 'base64').toString('utf8');
+    if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
+      connection.connect();
+      connection.query("SELECT * FROM Marcas WHERE activo = 'YES' ;",function(err,rows,fields){
+        if (err == null) {
+          res.json(rows);
+        }else{
+          res.json(err);
+        }
+        
+      });
+      connection.end();
+    }else{
+      respuesta.error = {"error":"AUTENTICACION INVALIDA"};
+      return res.json(respuesta);
+    }
+});
+
+
 app.post('/prueba',function(req,res){
   console.log(req);
   console.log(req.body.pw);
@@ -241,7 +278,6 @@ app.post('/prueba',function(req,res){
 app.listen(puerto,function(){
 	console.log("Listen on port: "+puerto);
 });
-
 
 
 
