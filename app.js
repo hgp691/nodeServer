@@ -69,6 +69,7 @@ app.post('/login', function(req, res){
   		var usuario = req.body.usuario;
   		var password = req.body.clave;
   		if (usuario != null && password != null) {
+  			console.log("Entra a todo");
   			respuesta.logs.push({"log":"ENTRO A TODO"});
   			var extension = "@compufacil.com.co";
   			var config = { url: 'ldap://corp.int',
