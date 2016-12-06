@@ -54,18 +54,18 @@ var Respuesta = function(){
 
 ///FUNCION QUE MANEJA EL LOGIN
 app.post('/login', function(req, res){
-  console.log("Hola Login");
+  	console.log("Hola Login");
 	var respuesta = new Respuesta();
 	if (!req.headers.authorization) {
 		respuesta.error = {"error":"DEBE AUTENTICAR"};
     	res.json(respuesta);
   	}
  	var encoded = req.headers.authorization.split(' ')[1];
-  var decoded = new Buffer(encoded, 'base64').toString('utf8');
-  console.log("user: "+decoded.split(':')[0]);
-  console.log("pw: "+decoded.split(':')[1]);
+  	var decoded = new Buffer(encoded, 'base64').toString('utf8');
+  	console.log("user: "+decoded.split(':')[0]);
+  	console.log("pw: "+decoded.split(':')[1]);
+  	/*
   	if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
-
   		var usuario = req.body.usuario;
   		var password = req.body.clave;
   		if (usuario != null && password != null) {
@@ -146,6 +146,8 @@ app.post('/login', function(req, res){
   		respuesta.error = {"error":"AUTENTICACION INVALIDA"};
     	return res.json(respuesta);
   	}
+  	*/
+  	res.end();
 });
 //EN POST NO HAY NADA
 app.post('/', function(req, res){
