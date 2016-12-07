@@ -64,7 +64,6 @@ app.post('/login', function(req, res){
   	var decoded = new Buffer(encoded, 'base64').toString('utf8');
   	console.log("user: "+decoded.split(':')[0]);
   	console.log("pw: "+decoded.split(':')[1]);
-  	/*
   	if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
   		var usuario = req.body.usuario;
   		var password = req.body.clave;
@@ -146,8 +145,7 @@ app.post('/login', function(req, res){
   		respuesta.error = {"error":"AUTENTICACION INVALIDA"};
     	return res.json(respuesta);
   	}
-  	*/
-  	res.end();
+  	//res.end();
 });
 //EN POST NO HAY NADA
 app.post('/', function(req, res){
@@ -265,13 +263,28 @@ app.post('/Marcas',function(req,res){
 });
 
 
-app.post('/prueba',function(req,res){
-  console.log(req);
-  console.log(req.body.pw);
-  console.log(req.body.nombre);
-  console.log(req.body.email);
-
-  res.json({"prueba":"prueba"})
+app.post('/pruebaLDAP',function(req,res){
+	var extension = "@compufacil.com.co";
+  	var config = { 
+  		url: 'ldap://corp.int',
+        baseDN: 'dc=corp,dc=int',
+        username: "hguzmanp",
+        password: "Marzo07Gp"
+    }
+    var ad = new ActiveDirectory(config);
+    ad.authenticate(usuario+extension, password, function(err, auth) {
+    	if (err) {
+    		console.log("ERROR: "+err);
+    	}else{
+    		console.log("No error");
+    		if (auth) {
+    			console.log("AUTH")
+    		}else{
+    			console.log("NO AUTH");
+    		}
+    	}
+    	res.json({"MSJ":"SALIO"});
+    });
 });
 
 
