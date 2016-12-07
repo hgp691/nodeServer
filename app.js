@@ -271,7 +271,7 @@ app.post('/pruebaLDAP',function(req,res){
   	var config = { 
   		url: 'ldap://corp.int',
         baseDN: 'dc=corp,dc=int',
-        username: usuario,
+        username: usuario+extension,
         password: password
     }
     console.log("Usuario: "+usuario+extension);
