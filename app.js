@@ -5,10 +5,10 @@ var bodyParser = require("body-parser");
 //INSTANCIA DE WEB
 var app = express();
 //app USA BODY PARSE
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended:true
 }));
+//app.use(bodyParser.json());
 ///SUBIR ARCHIVOS
 var fileUpload = require('express-fileupload');
 ///USAR FILEUPLOAD
