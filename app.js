@@ -292,7 +292,7 @@ app.post('/pruebaLDAP',function(req,res){
     });
 });
 
-app.all("/test/",function(req,res){
+app.all("/test",function(req,res){
     console.log(req.headers);
     console.log(req.body);
     res.send("");
