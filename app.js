@@ -264,6 +264,7 @@ app.post('/Marcas',function(req,res){
 
 
 app.post('/pruebaLDAP',function(req,res){
+	console.log("Entrada LDAP");
 	var usuario = "hguzmanp";
 	var password = "Marzo07Gp"
 	var extension = "@compufacil.com.co";
@@ -273,10 +274,12 @@ app.post('/pruebaLDAP',function(req,res){
         username: usuario,
         password: password
     }
+    console.log("Usuario: "+usuario+extension);
+    console.log("Password: "+password);
     var ad = new ActiveDirectory(config);
     ad.authenticate(usuario+extension, password, function(err, auth) {
     	if (err) {
-    		console.log("ERROR: "+err);
+    		console.log("ERROR(1): "+err);
     	}else{
     		console.log("No error");
     		if (auth) {
