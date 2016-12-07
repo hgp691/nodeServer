@@ -264,12 +264,14 @@ app.post('/Marcas',function(req,res){
 
 
 app.post('/pruebaLDAP',function(req,res){
+	var usuario = "hguzmanp";
+	var password = "Marzo07Gp"
 	var extension = "@compufacil.com.co";
   	var config = { 
   		url: 'ldap://corp.int',
         baseDN: 'dc=corp,dc=int',
-        username: "hguzmanp",
-        password: "Marzo07Gp"
+        username: usuario,
+        password: password
     }
     var ad = new ActiveDirectory(config);
     ad.authenticate(usuario+extension, password, function(err, auth) {
