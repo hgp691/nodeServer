@@ -5,13 +5,18 @@ var UsuarioSchema = new Schema({
 		type:String,
 		unique:true,
 		required:true
-	},imgPerfil:[{
+	},
+	imgPerfil:[{
 		ruta:String,
 		creada:{
 			type:Date,
 			default: Date.now
 		}
-	}]
+	}],
+	publicaciones:[{
+		type: Schema.Types.ObjectId, ref: 'Publicacion'
+	}],
+	celular:String
 });
 
 module.exports = mongoose.model("Usuario",UsuarioSchema);

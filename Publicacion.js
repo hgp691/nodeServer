@@ -5,7 +5,18 @@ var PublicacionSchema = new Schema({
 		type:Date,
 		default:Date.now
 	},
-	usuario:
+	usuario:{
+		type: Number, ref: 'Usuario'
+	},
+	texto:{
+		type:String
+	},
+	imagen:{
+		type:String
+	},
+	leInteresa:[{
+		type: Number, ref: 'Usuario'
+	}]
 });
 
 module.exports = mongoose.model("Publicacion",PublicacionSchema);

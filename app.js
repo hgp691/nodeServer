@@ -30,6 +30,8 @@ var BD = "mongodb://Localhost/test"
 mongoose.connect(BD);
 //USUARIO
 var Usuario = require("./Usuario");
+//Publicacion
+var Publicacion = require("./Publicacion");
 
 //MANEJADOR DE MYSQL
 var mysql      = require('mysql');
@@ -46,6 +48,14 @@ var connection = mysql.createConnection({
 
 var Respuesta = function(){
 	this.logs = [];
+}
+
+var Marca = function(){
+  this. marca;
+  this.archivos = [];
+  function anadir(obj){
+    this.archivos.push(obj);
+  }
 }
 
 
@@ -162,34 +172,31 @@ app.get('/', function(req, res){
 
 //IMAGEN DE PERFIL
 app.post('/subirImagen',function(req,res){
-	/*
+	
 	var respuesta = new Respuesta();
 	if (!req.headers.authorization) {
-		//respuesta.error = {"error":"DEBE AUTENTICAR"};
-    	//res.json(respuesta);
+		respuesta.error = {"error":"DEBE AUTENTICAR"};
+    	res.json(respuesta);
   	}
  	var encoded = req.headers.authorization.split(' ')[1];
   	var decoded = new Buffer(encoded, 'base64').toString('utf8');
   	if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
   		//subir archivo
-
-  	}else{
-  		respuesta.error = {"error":"AUTENTICACION INVALIDA"};
-    	return res.json(respuesta);
-  	}
-  	*/
-  	var sampleFile;
-  	if (req.files.foto.name == "") {
-  		res.json({"error":"DEBE ADJUNTAR UN ARCHIVO"});
-  		return;
-  	}else{
-  		sampleFile = req.files.foto;
-  		console.log("Imagen");
-  		//console.log(req.files);
+      var sampleFile;
+      if (req.files.foto.name == "") {
+        res.json({"error":"DEBE ADJUNTAR UN ARCHIVO"});
+        return;
+      }else{
+        console.log();
+      sampleFile = req.files.foto;
+      console.log("Imagen");
+      //console.log(req.files);
       var identificador = req.body.identificador;
       console.log("El identificador: "+identificador + Date.now());
-      var nombreImagen = 'imagenes/'+identificador+'_'+Date.now()+'.png'
-      sampleFile.mv(nombreImagen, function(err) {
+      //var ruta = "imagenes/"
+      var ruta = "../htdocs/archivos/usuarios/fotosPerfil/"
+      var nombreImagen = identificador+'_'+Date.now()+'.png'
+      sampleFile.mv(ruta+nombreImagen, function(err) {
         if (err) {
             res.status(500).json({"error":err});
             console.log("No subio imagen");
@@ -215,8 +222,53 @@ app.post('/subirImagen',function(req,res){
             });
         }
       });
+    }
+
+  	}else{
+  		respuesta.error = {"error":"AUTENTICACION INVALIDA"};
+    	return res.json(respuesta);
   	}
+  	
+  	
 });
+
+//CONFIGURAR TELEFONO
+app.post("/configurarCelular",function(req,res){
+  var respuesta = new Respuesta();
+  if (!req.headers.authorization) {
+      respuesta.error = {"error":"DEBE AUTENTICAR"};
+      return res.json(respuesta);
+  }
+  var encoded = req.headers.authorization.split(' ')[1];
+    var decoded = new Buffer(encoded, 'base64').toString('utf8');
+    if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
+      var identificador = req.body.identificador;
+      var celular = req.body.celular;
+      if (identificador == null || celular == null) {
+        return res.json({"error":"Debe enviar datos"});
+      }
+      Usuario.findByIdAndUpdate(identificador,
+        {
+          $set:{
+            celular:celular
+          }
+        },
+        {
+          safe:true,
+          upsert:true
+        },function(err,usuario){
+          if (err) {
+            res.json({"error":err});
+          }else{
+            res.json({"msj":"OK"});
+          }
+        });
+    }else{
+      respuesta.error = {"error":"AUTENTICACION INVALIDA"};
+      return res.json(respuesta);
+    }
+});
+
 
 
 //NUEVO COMPARTIR MOVIL
@@ -236,33 +288,8 @@ app.post('/compartirMovil',function(req,res){
   	}
 });
 
-//CARGAR MARCAS
-app.post('/Marcas',function(req,res){
-  var respuesta = new Respuesta();
-  if (!req.headers.authorization) {
-    respuesta.error = {"error":"DEBE AUTENTICAR"};
-      res.json(respuesta);
-    }
-  var encoded = req.headers.authorization.split(' ')[1];
-    var decoded = new Buffer(encoded, 'base64').toString('utf8');
-    if (idApi == decoded.split(':')[0] && pwApi == decoded.split(':')[1]) {
-      connection.connect();
-      connection.query("SELECT * FROM Marcas WHERE activo = 'YES' ;",function(err,rows,fields){
-        if (err == null) {
-          res.json(rows);
-        }else{
-          res.json(err);
-        }
-        
-      });
-      connection.end();
-    }else{
-      respuesta.error = {"error":"AUTENTICACION INVALIDA"};
-      return res.json(respuesta);
-    }
-});
 
-
+///PRUEBA PARA SABER QUE ESTA FUNCIONANDO EL LDAP
 app.post('/pruebaLDAP',function(req,res){
 	console.log("Entrada LDAP");
 	var usuario = "hguzmanp";
@@ -297,6 +324,10 @@ app.all("/test",function(req,res){
     console.log(req.body);
     res.send("");
 });
+
+
+
+
 
 
 
